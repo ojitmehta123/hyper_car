@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<launch>
+
+<param name="robot_description" command="cat '$(find hyper_car)/car_model/hyper_car.urdf'" />
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="false"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+  
+  <node pkg="gazebo_ros" type="spawn_model" name="spawn_urdf" 
+  args="-urdf -model hyper_car -x -10.0 -y 0.0 -z 0.0 -param robot_description" />
+
+  <node pkg="hyper_car" type="hyper_car_test.py" name="cmd_vel_speedtest" output="log"/>
+  <node pkg="rosbag" type="record" name="record" args="-o $(find hyper_car)/bag/this.bag /hyper_car/cmd_vel"/>
+</launch>
